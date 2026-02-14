@@ -50,7 +50,7 @@ export default function App(){
 
         method:"POST",
 
-        headers:{"Content-Type":"application/json",Authorization:token},
+        headers:{"Content-Type":"application/json",Authorization:`Bearer ${token}`},
 
         body:JSON.stringify({name,price})
 
@@ -68,7 +68,7 @@ export default function App(){
 
         method:"DELETE",
 
-        headers:{Authorization:token}
+        headers:{Authorization: `Bearer ${token}`}
 
         });
 
@@ -80,9 +80,14 @@ export default function App(){
 
     async function loadProductsUtil(){
 
-        const res=await fetch(API+"/products",{headers:{Authorization:token}});
+        const res=await fetch(API+"/products",{headers:{Authorization: `Bearer ${token}`}});
 
-        setProducts(await res.json());
+        const data = await res.json();
+        if (Array.isArray(data)){
+            setProducts(data);
+        }else{
+            console.error("Respuesta inesperada: ", data);
+        }
 
     }
 
@@ -92,8 +97,13 @@ export default function App(){
         if (token) {
             const loadProducts = async () => {
                 try {
-                    const res = await fetch(API + "/products", { headers: { Authorization: token } });
-                    setProducts(await res.json());
+                    const res = await fetch(API + "/products", { headers: { Authorization: `Bearer ${token}` } });
+                    const data = await res.json();
+                    if (Array.isArray(data)){
+                    setProducts(data);
+                }else{
+                    console.error("Respuesta inesperada: ", data)
+                }
                 } catch (error) {
                     console.error("Error al cargar los productos:", error);
                 }
