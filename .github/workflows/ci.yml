@@ -2,9 +2,9 @@ name: CI - Backend Tests
 
 on:
   push:
-    branches: [main]
+    branches: [ main ]
   pull_request:
-    branches: [main]
+    branches: [ main ]
 
 jobs:
   test:
@@ -12,19 +12,21 @@ jobs:
 
     defaults:
       run:
-        working-directory: ./Backend
-      
-      steps:
-        - name: Checkout repository
-          uses: actions/checkout@v4
-        
-        - name: Use Node.js
-          uses: actions/setup-node@v4
-          with:
-            node-version: 18
+        working-directory: ./backend
 
-        - name: Install dependencies
-          run: npm Install
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-        - name: Run Tests
-          run: npm test
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm test
+        env:
+          JWT_SECRET: testsecret
